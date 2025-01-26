@@ -2,7 +2,9 @@
 串口线程创建，串口操作
 Pyqt5 QThread多线程操作参考链接：https://www.cnblogs.com/linyfeng/p/12239856.html
 """
-from PyQt5.QtCore import QThread, pyqtSignal
+import time
+
+from PyQt5.QtCore import *
 import serial
 
 
@@ -95,7 +97,6 @@ class SerialThread(QThread):
                     if data:
                         self.data_received.emit(data)
         except Exception as e:
-            print("serial thread error: ", e)
             self.serial_error.emit(str(e))
 
     def __read_data__(self):
@@ -122,8 +123,7 @@ class SerialThread(QThread):
                     data_str += '\r\n'
             return data_str
         except Exception as e:
-            print("接收数据异常：", e)
-            self.serial_error.emit("接收数据异常！")
+            self.serial_error.emit("接收数据异常！", e)
 
     def stop(self):
         """
@@ -139,7 +139,7 @@ class SerialThread(QThread):
         :return:
         """
         if not self.running:
-            print("请先打开串口！")
+            self.serial_error.emit("请先打开串口！")
             return
 
         # hex发送 比如：5a 5a 02 03 5a -> b'ZZ\x02\x03Z'
@@ -150,7 +150,7 @@ class SerialThread(QThread):
                 try:
                     num = int(data_str[0:2], 16)
                 except ValueError:
-                    print('请输入十六进制数据，以空格分开!')
+                    self.serial_error.emit('请输入十六进制数据，以空格分开!')
                     return
                 data_str = data_str[2:].strip()
                 send_list.append(num)
@@ -167,5 +167,4 @@ class SerialThread(QThread):
         try:
             self.serial.write(byte_array)
         except Exception as e:
-            print("发送失败", e)
-            print('发送失败!')
+            self.serial_error.emit('发送失败!')

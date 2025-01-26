@@ -12,8 +12,12 @@ from PyQt5.QtGui import QIcon, QTextCursor
 from PyQt5.QtWidgets import QComboBox, QMessageBox, QMainWindow
 
 from serialThread import SerialThread
+from AutoSend import AutoSend
 # 导入设计的ui界面转换成的py文件
 import displayUI as Ui_MainWindow
+
+# 最小自动发送的时间间隔
+MIN_AUTOSEND_MS = 10
 
 
 class SerialPort(QMainWindow):
@@ -32,9 +36,12 @@ class SerialPort(QMainWindow):
         self.__init_recv_setting__()
         self.__init_recv_data_viewer__()
         self.__init_send_data_viewer__()
+        self.__init_auto_send_data__()
 
         # 串口接收线程
         self.serial_thread = None
+        # 串口自动发送线程
+        self.serial_autosend_thread = None
 
     def __init_serial_setting__(self):
         """
@@ -79,6 +86,10 @@ class SerialPort(QMainWindow):
             self.ui.comboBox_3.addItem(str(data_bit), data_bit)
         # 设置默认值
         self.ui.comboBox_3.setCurrentIndex(0)
+
+        # 初始化周期发送时间(1000ms)
+        self.ui.lineEdit_2.setText('1000')
+
         # 打开串口
         self.ui.pushButton_2.clicked.connect(self.open_serial_connection)
 
@@ -171,9 +182,11 @@ class SerialPort(QMainWindow):
                         'hex' if self.ui.radioButton.isChecked() else 'ascii',
                         'hex' if self.ui.radioButton_3.isChecked() else 'ascii'
             )
+            # 串口线程操作
             self.serial_thread.data_received.connect(self.handle_data_received)
             self.serial_thread.serial_error.connect(self.handler_serial_error)
             self.serial_thread.start()
+            # ui界面操作
             self.ui.comboBox.setEnabled(False)
             self.ui.comboBox_2.setEnabled(False)
             self.ui.comboBox_3.setEnabled(False)
@@ -181,10 +194,14 @@ class SerialPort(QMainWindow):
             self.ui.comboBox_5.setEnabled(False)
             self.ui.pushButton.setEnabled(True)
             self.ui.pushButton_3.setEnabled(True)
+            self.ui.checkBox_8.setEnabled(True)
+            self.ui.label_8.setEnabled(True)
+            self.ui.lineEdit_2.setEnabled(True)
             self.ui.pushButton_2.setText("关闭串口")
         else:
+            # 串口线程操作
             self.serial_thread.stop()
-            # 打开串口操作
+            # ui界面操作
             self.ui.comboBox.setEnabled(True)
             self.ui.comboBox_2.setEnabled(True)
             self.ui.comboBox_3.setEnabled(True)
@@ -192,6 +209,9 @@ class SerialPort(QMainWindow):
             self.ui.comboBox_5.setEnabled(True)
             self.ui.pushButton.setEnabled(False)
             self.ui.pushButton_3.setEnabled(False)
+            self.ui.checkBox_8.setEnabled(False)
+            self.ui.label_8.setEnabled(False)
+            self.ui.lineEdit_2.setEnabled(False)
             self.ui.pushButton_2.setText("打开串口")
 
     def __validata_setting__(self):
@@ -267,3 +287,39 @@ class SerialPort(QMainWindow):
         :return:
         """
         self.ui.textEdit.clear()
+
+    def __init_auto_send_data__(self):
+        """
+        周期发送初始化
+        :return:
+        """
+        # 慎用checkBox.stateChanged.connect
+        self.ui.checkBox_8.clicked.connect(self.handler_auto_send_data)
+
+    def handler_auto_send_data(self):
+        """
+        创建`serial_autosend_thread`线程每隔`timelength`返回一个True信号
+        :return:
+        """
+        if self.ui.checkBox_8.isChecked():
+            timelength = self.ui.lineEdit_2.text()
+            if timelength == '':
+                QMessageBox.warning(self, "warning", "设置周期时间！")
+                self.ui.checkBox_8.setChecked(False)
+                return
+            try:
+                timelength = int(timelength)
+            except ValueError as e:
+                QMessageBox.warning(self, "warning", str(e))
+                self.ui.checkBox_8.setChecked(False)
+                return
+            if timelength < MIN_AUTOSEND_MS:
+                QMessageBox.warning(self, "warning", "周期时间太短！")
+                self.ui.checkBox_8.setChecked(False)
+                return
+            self.serial_autosend_thread = AutoSend(timelength)
+            self.serial_autosend_thread.timeout.connect(self.send_serial_data)
+            self.serial_autosend_thread.start()
+        else:
+            if self.serial_autosend_thread and self.serial_autosend_thread.isRunning:
+                self.serial_autosend_thread.stop()
