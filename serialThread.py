@@ -15,7 +15,7 @@ class SerialThread(QThread):
     data_received = pyqtSignal(str)
     serial_error = pyqtSignal(str)
 
-    def __init__(self, port, baud_rate, data_bits, parity_bits, stop_bits, data_format_send, data_format_recv):
+    def __init__(self, port, baud_rate, data_bits, parity_bits, stop_bits, data_format_send, data_format_recv, auto_line):
         """
         初始化
         :param port:            串口号
@@ -41,7 +41,7 @@ class SerialThread(QThread):
         self.__data_format_send = data_format_send
         self.__data_format_recv = data_format_recv
         # 开启自动追加换行
-        self.__auto_line = True
+        self.__auto_line = auto_line
 
     # 通过@property将data_format_send(data_format_recv)修饰为属性
     @property
@@ -76,6 +76,16 @@ class SerialThread(QThread):
         if value not in ['hex', 'ascii']:
             raise ValueError('data_format must be either hex or ascii')
         self.__data_format_recv = value
+
+    @property
+    def auto_line(self):
+        return self.__auto_line
+
+    @auto_line.setter
+    def auto_line(self, value):
+        if not isinstance(value, bool):
+            raise TypeError('auto_line must be bool')
+        self.__auto_line = value
 
     # 重写run（）在执行serial_thread.start()时执行
     def run(self):
@@ -119,7 +129,7 @@ class SerialThread(QThread):
             else:
                 # 串口接收到的字符串为b'ZZ\x02\x03Z'，要转换成16进制字符串显示
                 data_str = ' '.join(format(x, '02x') for x in byte_array)
-                if self.__auto_line:
+                if self.auto_line:
                     data_str += '\r\n'
             return data_str
         except Exception as e:
@@ -154,12 +164,12 @@ class SerialThread(QThread):
                     return
                 data_str = data_str[2:].strip()
                 send_list.append(num)
-            if self.__auto_line:
+            if self.auto_line:
                 send_list.append(0x0d)
                 send_list.append(0x0a)
             byte_array = bytes(send_list)
         else:
-            if self.__auto_line:
+            if self.auto_line:
                 data += '\r\n'
             # ascii发送 比如：'ABC' -> b'ABC'
             byte_array = data.encode('utf-8')

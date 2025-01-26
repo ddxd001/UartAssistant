@@ -37,6 +37,7 @@ class SerialPort(QMainWindow):
         self.__init_recv_data_viewer__()
         self.__init_send_data_viewer__()
         self.__init_auto_send_data__()
+        self.__init_auto_line__()
 
         # 串口接收线程
         self.serial_thread = None
@@ -89,6 +90,9 @@ class SerialPort(QMainWindow):
 
         # 初始化周期发送时间(1000ms)
         self.ui.lineEdit_2.setText('1000')
+
+        # 发送新行初始化
+        self.ui.checkBox_2.setChecked(True)
 
         # 打开串口
         self.ui.pushButton_2.clicked.connect(self.open_serial_connection)
@@ -180,7 +184,8 @@ class SerialPort(QMainWindow):
                         self.ui.comboBox_5.currentData(),  # 校验位
                         self.ui.comboBox_3.currentData(),  # 停止位
                         'hex' if self.ui.radioButton.isChecked() else 'ascii',
-                        'hex' if self.ui.radioButton_3.isChecked() else 'ascii'
+                        'hex' if self.ui.radioButton_3.isChecked() else 'ascii',
+                        self.ui.checkBox_2.isChecked()
             )
             # 串口线程操作
             self.serial_thread.data_received.connect(self.handle_data_received)
@@ -277,6 +282,9 @@ class SerialPort(QMainWindow):
             QMessageBox.warning(self, "Warning", "请先打开串口！")
             return
         data = self.ui.textEdit.toPlainText()
+        # 发送新行
+        if self.ui.checkBox_2.isChecked():
+            data += '\r\n'
         # print(data)
         if data != "":
             self.serial_thread.send_data(data)
@@ -323,3 +331,14 @@ class SerialPort(QMainWindow):
         else:
             if self.serial_autosend_thread and self.serial_autosend_thread.isRunning:
                 self.serial_autosend_thread.stop()
+
+    def __init_auto_line__(self):
+        self.ui.checkBox_2.clicked.connect(self.handler_auto_line_data)
+
+    def handler_auto_line_data(self):
+        if not self.serial_thread or not self.serial_thread.isRunning():
+            return
+        if self.ui.checkBox_2.isChecked():
+            self.serial_thread.auto_line = True
+        else:
+            self.serial_thread.auto_line = False
