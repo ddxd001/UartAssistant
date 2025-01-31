@@ -84,7 +84,7 @@ class SerialPort(QMainWindow):
         self.ui.comboBox_3.setEditable(False)
         self.ui.comboBox_3.setMaxVisibleItems(10)  # 设置最大显示下列项 超过要使用滚动条拖拉
         self.ui.comboBox_3.setInsertPolicy(QComboBox.InsertAfterCurrent)  # 设置插入方式
-        for data_bit in [serial.STOPBITS_ONE, serial.STOPBITS_TWO]:
+        for data_bit in [serial.STOPBITS_ONE, serial.STOPBITS_ONE_POINT_FIVE, serial.STOPBITS_TWO]:
             self.ui.comboBox_3.addItem(str(data_bit), data_bit)
 
         # radiobutton组 # 解决点击已选择radiobutton时取消选择bug
