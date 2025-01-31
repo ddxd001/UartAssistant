@@ -4,12 +4,13 @@ Author: DdXd
 Date: 2025/01/26
 
 加载初始化界面
+主线程，负责渲染窗口界面，接收界面操作功能
 """
 import serial
 import serial.tools.list_ports
 from PyQt5.QtCore import QDateTime
-from PyQt5.QtGui import QIcon, QTextCursor
-from PyQt5.QtWidgets import QComboBox, QMessageBox, QMainWindow
+from PyQt5.QtGui import QTextCursor
+from PyQt5.QtWidgets import QComboBox, QMessageBox, QMainWindow, QButtonGroup
 
 from serialThread import SerialThread
 from AutoSend import AutoSend
@@ -85,6 +86,15 @@ class SerialPort(QMainWindow):
         self.ui.comboBox_3.setInsertPolicy(QComboBox.InsertAfterCurrent)  # 设置插入方式
         for data_bit in [serial.STOPBITS_ONE, serial.STOPBITS_TWO]:
             self.ui.comboBox_3.addItem(str(data_bit), data_bit)
+
+        # radiobutton组 # 解决点击已选择radiobutton时取消选择bug
+        self.ui.ButtonGroup_1 = QButtonGroup()
+        self.ui.ButtonGroup_2 = QButtonGroup()
+        self.ui.ButtonGroup_1.addButton(self.ui.radioButton)
+        self.ui.ButtonGroup_1.addButton(self.ui.radioButton_2)
+        self.ui.ButtonGroup_2.addButton(self.ui.radioButton_3)
+        self.ui.ButtonGroup_2.addButton(self.ui.radioButton_4)
+
         # 设置默认值
         self.ui.comboBox_3.setCurrentIndex(0)
 
@@ -110,20 +120,16 @@ class SerialPort(QMainWindow):
         16进制选项
         :return:
         """
-        if self.ui.radioButton.isChecked():
-            self.ui.radioButton_2.setChecked(False)
-            if self.serial_thread:
-                self.serial_thread.data_format_send = 'hex'
+        if self.serial_thread:
+            self.serial_thread.data_format_send = 'hex'
 
     def rbn_data_format_ascii_clicked(self):
         """
         ascii选项
         :return:
         """
-        if self.ui.radioButton_2.isChecked():
-            self.ui.radioButton.setChecked(False)
-            if self.serial_thread:
-                self.serial_thread.data_format_send = 'ascii'
+        if self.serial_thread:
+            self.serial_thread.data_format_send = 'ascii'
 
     def __init_recv_data_viewer__(self):
         """
@@ -143,20 +149,16 @@ class SerialPort(QMainWindow):
 
         :return:
         """
-        if self.ui.radioButton_3.isChecked():
-            self.ui.radioButton_4.setChecked(False)
-            if self.serial_thread:
-                self.serial_thread.data_format_recv = 'hex'
+        if self.serial_thread:
+            self.serial_thread.data_format_recv = 'hex'
 
     def ckb_data_format_ascii_clicked(self):
         """
 
         :return:
         """
-        if self.ui.radioButton_4.isChecked():
-            self.ui.radioButton_3.setChecked(False)
-            if self.serial_thread:
-                self.serial_thread.data_format_recv = 'ascii'
+        if self.serial_thread:
+            self.serial_thread.data_format_recv = 'ascii'
 
     def __init_send_data_viewer__(self):
         """
@@ -205,8 +207,10 @@ class SerialPort(QMainWindow):
             self.ui.pushButton_2.setText("关闭串口")
         else:
             # 串口线程操作
+            self.serial_autosend_thread.stop()  # 防止在自动发送时关闭串口导致连续弹窗问题
             self.serial_thread.stop()
             # ui界面操作
+            self.ui.checkBox_8.setChecked(False)
             self.ui.comboBox.setEnabled(True)
             self.ui.comboBox_2.setEnabled(True)
             self.ui.comboBox_3.setEnabled(True)
@@ -282,9 +286,6 @@ class SerialPort(QMainWindow):
             QMessageBox.warning(self, "Warning", "请先打开串口！")
             return
         data = self.ui.textEdit.toPlainText()
-        # 发送新行
-        if self.ui.checkBox_2.isChecked():
-            data += '\r\n'
         # print(data)
         if data != "":
             self.serial_thread.send_data(data)

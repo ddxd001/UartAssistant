@@ -1,3 +1,8 @@
+"""
+AutoSend.py
+定时发送线程，于勾选周期发送选项时创建该线程
+"""
+
 from PyQt5.QtCore import *
 import time
 

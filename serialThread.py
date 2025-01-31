@@ -1,9 +1,8 @@
 """
 串口线程创建，串口操作
+串口线程，在打开串口时创建线程，包含串口相关的操作
 Pyqt5 QThread多线程操作参考链接：https://www.cnblogs.com/linyfeng/p/12239856.html
 """
-import time
-
 from PyQt5.QtCore import *
 import serial
 
