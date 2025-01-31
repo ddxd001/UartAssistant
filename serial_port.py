@@ -30,7 +30,7 @@ class SerialPort(QMainWindow):
         # QMainWindow构造函数初始化
         super().__init__()
 
-        self.ui = Ui_MainWindow.Ui_Form()
+        self.ui = Ui_MainWindow.Ui_MainWindow()
         # 这个函数本身需要传递一个MainWindow类，而该类本身就继承了这个，所以可以直接传入self
         self.ui.setupUi(self)
         self.__init_serial_setting__()
@@ -180,17 +180,22 @@ class SerialPort(QMainWindow):
 
             # 建立一个串口
             self.serial_thread = SerialThread(
-                        self.ui.comboBox.currentText(),  # 端口
-                        self.ui.comboBox_2.currentData(),  # 波特率
-                        self.ui.comboBox_4.currentData(),  # 数据位
-                        self.ui.comboBox_5.currentData(),  # 校验位
-                        self.ui.comboBox_3.currentData(),  # 停止位
-                        'hex' if self.ui.radioButton.isChecked() else 'ascii',
-                        'hex' if self.ui.radioButton_3.isChecked() else 'ascii',
-                        self.ui.checkBox_2.isChecked()
+                self.ui.comboBox.currentText(),  # 端口
+                self.ui.comboBox_2.currentData(),  # 波特率
+                self.ui.comboBox_4.currentData(),  # 数据位
+                self.ui.comboBox_5.currentData(),  # 校验位
+                self.ui.comboBox_3.currentData(),  # 停止位
+                'hex' if self.ui.radioButton.isChecked() else 'ascii',
+                'hex' if self.ui.radioButton_3.isChecked() else 'ascii',
+                self.ui.checkBox_2.isChecked()
             )
             # 串口线程操作
-            self.serial_thread.data_received.connect(self.handle_data_received)
+            self.serial_thread.data_received.connect(
+                lambda data_received: self.handle_data_display(
+                    data_received,
+                    "recv as " + ('hex' if self.ui.radioButton_3.isChecked() else 'asc')
+                )
+            )
             self.serial_thread.serial_error.connect(self.handler_serial_error)
             self.serial_thread.start()
             # ui界面操作
@@ -255,23 +260,26 @@ class SerialPort(QMainWindow):
         """
         QMessageBox.critical(self, '错误', error)
 
-    def handle_data_received(self, data):
+    def handle_data_display(self, data, data_from: str):
         """
-        接收数据
+        将数据显示到textBrowser
+        :param data_from: 数据来源（send/recv）
         :param data:接收到的数据
         :return:
         """
         # 获取时间
         current_time = QDateTime.currentDateTime().toString("yyyy-MM-dd hh:mm:ss")
-
+        display_str = ""
         # 超过5000字符清空
         if len(self.ui.textBrowser.toPlainText()) > 5000:
             self.ui.textBrowser.clear()
         # 更新显示区域中的数据
-        if self.ui.checkBox_7.isChecked():
-            self.ui.textBrowser.insertPlainText(f"[{current_time}] {data}")
-        else:
-            self.ui.textBrowser.insertPlainText(f"{data}")
+        if self.ui.checkBox.isChecked():    # 输出显示
+            display_str += f"[{data_from}]"
+        if self.ui.checkBox_7.isChecked():  # 时间戳
+            display_str += f"[{current_time}]"
+        display_str += f"{data}"
+        self.ui.textBrowser.insertPlainText(display_str)
 
         # 必须是hex格式
         if self.ui.radioButton_2.isChecked():
@@ -289,6 +297,9 @@ class SerialPort(QMainWindow):
         # print(data)
         if data != "":
             self.serial_thread.send_data(data)
+            if self.ui.checkBox.isChecked():  # 打开显示输出
+                self.handle_data_display(data + "\r\n",
+                                         "send as " + ('hex' if self.ui.radioButton.isChecked() else 'asc'))
 
     def clear_serial_data(self):
         """
@@ -339,7 +350,4 @@ class SerialPort(QMainWindow):
     def handler_auto_line_data(self):
         if not self.serial_thread or not self.serial_thread.isRunning():
             return
-        if self.ui.checkBox_2.isChecked():
-            self.serial_thread.auto_line = True
-        else:
-            self.serial_thread.auto_line = False
+        self.serial_thread.auto_line = self.ui.checkBox_2.isChecked()

@@ -1,5 +1,6 @@
 """
 project:    UsartAssistant
+branch:     master
 author:     DdXd
 date:       2025/01/24
 python:     3.8
