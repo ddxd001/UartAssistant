@@ -1746,6 +1746,7 @@
     </item>
    </layout>
   </widget>
+  <widget class="QStatusBar" name="statusbar"/>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
@@ -1757,10 +1758,11 @@
    </property>
    <widget class="QMenu" name="menu">
     <property name="title">
-     <string>首选项</string>
+     <string>文件</string>
     </property>
-    <addaction name="actionOpen_File"/>
-    <addaction name="actionSave"/>
+    <addaction name="action_4"/>
+    <addaction name="separator"/>
+    <addaction name="actions"/>
    </widget>
    <widget class="QMenu" name="menu_2">
     <property name="title">
@@ -1769,35 +1771,49 @@
     <addaction name="actionabout_UartAssistant_v1_0"/>
     <addaction name="actionabout_Author"/>
     <addaction name="separator"/>
-    <addaction name="actionHow_to_use_this_Software"/>
+    <addaction name="action_3"/>
    </widget>
    <addaction name="menu"/>
    <addaction name="menu_2"/>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
   <action name="actionabout_UartAssistant_v1_0">
    <property name="text">
-    <string>about UartAssistant v1.0</string>
+    <string>关于UartAssistant v1.0</string>
    </property>
   </action>
   <action name="actionabout_Author">
    <property name="text">
-    <string>about Author</string>
+    <string>关于作者</string>
    </property>
   </action>
-  <action name="actionHow_to_use_this_Software">
+  <action name="action_3">
    <property name="text">
-    <string>How to use this Software</string>
+    <string>使用帮助</string>
    </property>
   </action>
-  <action name="actionOpen_File">
+  <action name="action_4">
    <property name="text">
-    <string>Open File</string>
+    <string>保存</string>
    </property>
   </action>
-  <action name="actionSave">
+  <action name="action_1">
    <property name="text">
-    <string>Save</string>
+    <string>导入会话</string>
+   </property>
+  </action>
+  <action name="action">
+   <property name="text">
+    <string>主题</string>
+   </property>
+  </action>
+  <action name="action_2">
+   <property name="text">
+    <string>导入快捷发送</string>
+   </property>
+  </action>
+  <action name="actions">
+   <property name="text">
+    <string>设置</string>
    </property>
   </action>
  </widget>

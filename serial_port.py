@@ -6,11 +6,14 @@ Date: 2025/01/26
 加载初始化界面
 主线程，负责渲染窗口界面，接收界面操作功能
 """
+import os
+import webbrowser
+
 import serial
 import serial.tools.list_ports
 from PyQt5.QtCore import QDateTime
 from PyQt5.QtGui import QTextCursor
-from PyQt5.QtWidgets import QComboBox, QMessageBox, QMainWindow, QButtonGroup, QPushButton, QLineEdit
+from PyQt5.QtWidgets import QComboBox, QMessageBox, QMainWindow, QButtonGroup, QPushButton, QLineEdit, QFileDialog
 
 from serialThread import SerialThread
 from AutoSend import AutoSend
@@ -40,6 +43,7 @@ class SerialPort(QMainWindow):
         self.__init_auto_send_data__()
         self.__init_auto_line__()
         self.__init_shortcut__(10)
+        self.__init_menu__()
 
         # 串口接收线程
         self.serial_thread = None
@@ -387,3 +391,27 @@ class SerialPort(QMainWindow):
                                          "send as " + ('hex' if self.ui.radioButton.isChecked() else 'asc'))
         except Exception as e:
             QMessageBox.warning(self, 'warning', str(e))
+
+    def __init_menu__(self):
+        """
+        顶部菜单初始化
+        :return:
+        """
+        # 保存文件
+        self.ui.action_4.triggered.connect(self.handler_saveFile)
+        # self.ui.action_3.triggered.connect(self.handler_help)
+
+    def handler_saveFile(self):
+        """
+        顶部菜单保存
+        :return:
+        """
+        text = self.ui.textBrowser.toPlainText()
+        if text == '':
+            QMessageBox.warning(self, 'empty file', 'nothing to save')
+            return
+        save_path = QFileDialog.getSaveFileName(self, "设置路径", "./", "Text Files (*.txt)")
+        if save_path[0] == '':
+            return
+        file = open(save_path[0], 'w')
+        file.write(text)
