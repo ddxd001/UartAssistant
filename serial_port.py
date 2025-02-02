@@ -10,7 +10,7 @@ import serial
 import serial.tools.list_ports
 from PyQt5.QtCore import QDateTime
 from PyQt5.QtGui import QTextCursor
-from PyQt5.QtWidgets import QComboBox, QMessageBox, QMainWindow, QButtonGroup
+from PyQt5.QtWidgets import QComboBox, QMessageBox, QMainWindow, QButtonGroup, QPushButton, QLineEdit
 
 from serialThread import SerialThread
 from AutoSend import AutoSend
@@ -39,6 +39,7 @@ class SerialPort(QMainWindow):
         self.__init_send_data_viewer__()
         self.__init_auto_send_data__()
         self.__init_auto_line__()
+        self.__init_shortcut__(10)
 
         # 串口接收线程
         self.serial_thread = None
@@ -212,7 +213,8 @@ class SerialPort(QMainWindow):
             self.ui.pushButton_2.setText("关闭串口")
         else:
             # 串口线程操作
-            self.serial_autosend_thread.stop()  # 防止在自动发送时关闭串口导致连续弹窗问题
+            if self.serial_autosend_thread:
+                self.serial_autosend_thread.stop()  # 防止在自动发送时关闭串口导致连续弹窗问题
             self.serial_thread.stop()
             # ui界面操作
             self.ui.checkBox_8.setChecked(False)
@@ -351,3 +353,37 @@ class SerialPort(QMainWindow):
         if not self.serial_thread or not self.serial_thread.isRunning():
             return
         self.serial_thread.auto_line = self.ui.checkBox_2.isChecked()
+
+    def __init_shortcut__(self, nums: int):
+        """
+        批量初始化快捷发送功能
+        :param nums: 快捷指令数量
+        :return:
+        """
+        for i in range(1, nums + 1):
+            self.child_button = self.ui.scrollArea.findChild(QPushButton, 'pb_{}'.format(i))
+            self.child_button.clicked.connect(self.handler_shortcut)
+
+    def handler_shortcut(self):
+        """
+        快捷发送对应lineEdit内容
+        :return:
+        """
+        if not self.serial_thread or not self.serial_thread.isRunning():
+            QMessageBox.warning(self, 'warning', '未打开串口')
+            return
+        sent = self.sender().text()
+        child_lineEdit = self.ui.scrollArea.findChild(QLineEdit, 'le_{}'.format(sent))
+
+        # 通过ascii发送
+        self.ui.radioButton_2.setChecked(True)
+        self.serial_thread.data_format_send = 'ascii'
+
+        try:
+            data = child_lineEdit.text()
+            self.serial_thread.send_data(data)
+            if self.ui.checkBox.isChecked():  # 打开显示输出
+                self.handle_data_display(data + "\r\n",
+                                         "send as " + ('hex' if self.ui.radioButton.isChecked() else 'asc'))
+        except Exception as e:
+            QMessageBox.warning(self, 'warning', str(e))
