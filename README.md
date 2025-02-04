@@ -17,7 +17,7 @@
 1.  似乎没什么要说的
 2.  软件功能初步开发中 ，存在一些bug，可以通过`issues`反馈，或者发布`pull requests`修正
 
-![软件界面](./image/%E8%BD%AF%E4%BB%B6%E7%95%8C%E9%9D%A2.png)
+![输入图片说明](image/%E8%BD%AF%E4%BB%B6%E7%95%8C%E9%9D%A2.png)
 
 #### 参与贡献
 
