@@ -7,21 +7,26 @@ Date: 2025/01/26
 主线程，负责渲染窗口界面，接收界面操作功能
 """
 import os
-import webbrowser
+import sys
 
 import serial
 import serial.tools.list_ports
 from PyQt5.QtCore import QDateTime
-from PyQt5.QtGui import QTextCursor
-from PyQt5.QtWidgets import QComboBox, QMessageBox, QMainWindow, QButtonGroup, QPushButton, QLineEdit, QFileDialog
+from PyQt5.QtGui import QTextCursor, QIcon
+from PyQt5.QtWidgets import QComboBox, QMessageBox, QMainWindow, QButtonGroup, QPushButton, QLineEdit, QFileDialog, \
+    QApplication
 
+import settings_thread
 from serialThread import SerialThread
 from AutoSend import AutoSend
+from settings_thread import SettingsThread
 # 导入设计的ui界面转换成的py文件
 import displayUI as Ui_MainWindow
 
 # 最小自动发送的时间间隔
 MIN_AUTOSEND_MS = 10
+SHORTCUT_LIST_NUM = 60
+BASE_PATH = os.path.dirname(os.path.realpath(sys.argv[0]))
 
 
 class SerialPort(QMainWindow):
@@ -42,13 +47,24 @@ class SerialPort(QMainWindow):
         self.__init_send_data_viewer__()
         self.__init_auto_send_data__()
         self.__init_auto_line__()
-        self.__init_shortcut__(10)
+        self.__init_shortcut__(SHORTCUT_LIST_NUM)
         self.__init_menu__()
+        self.__init_shortcut_autosave__()
+        self.__init_sendFile__()
 
         # 串口接收线程
         self.serial_thread = None
         # 串口自动发送线程
         self.serial_autosend_thread = None
+        # 设置logo
+        self.setWindowIcon(QIcon(os.path.join(BASE_PATH, 'logo.ico')))
+
+    def __del__(self):
+        self.__del_shortcut_autosave__()
+
+    def closeEvent(self, event):
+        self.__del__()
+        event.accept()
 
     def __init_serial_setting__(self):
         """
@@ -280,7 +296,7 @@ class SerialPort(QMainWindow):
         if len(self.ui.textBrowser.toPlainText()) > 5000:
             self.ui.textBrowser.clear()
         # 更新显示区域中的数据
-        if self.ui.checkBox.isChecked():    # 输出显示
+        if self.ui.checkBox.isChecked():  # 输出显示
             display_str += f"[{data_from}]"
         if self.ui.checkBox_7.isChecked():  # 时间戳
             display_str += f"[{current_time}]"
@@ -400,6 +416,10 @@ class SerialPort(QMainWindow):
         # 保存文件
         self.ui.action_4.triggered.connect(self.handler_saveFile)
         # self.ui.action_3.triggered.connect(self.handler_help)
+        self.ui.action_6.triggered.connect(self.handler_exportShortcut)
+        self.ui.action_5.triggered.connect(self.handler_importShortcut)
+        self.ui.actions.triggered.connect(self.handler_settings)
+        self.ui.action_7.triggered.connect(self.handler_shortcutCleanup)
 
     def handler_saveFile(self):
         """
@@ -415,3 +435,124 @@ class SerialPort(QMainWindow):
             return
         file = open(save_path[0], 'w')
         file.write(text)
+
+    def handler_exportShortcut(self):
+        """
+        导出快捷发送中的内容到文件（*.）中
+        :return:
+        """
+        exportStr = ''
+        for i in range(1, SHORTCUT_LIST_NUM + 1):
+            tmp = eval(f'self.ui.le_{i}.text()')
+            tmp = tmp.strip()
+            if tmp != '':
+                exportStr += str(i) + ' ' + tmp + '\n'
+        if exportStr != '':
+            save_path = QFileDialog.getSaveFileName(self, "设置路径", "./", "Text Files (*.dat)")
+            if save_path[0] == '':
+                return
+            file = open(save_path[0], 'w')
+            file.write(exportStr)
+
+    def handler_importShortcut(self):
+        """
+        将一定格式的文件导入到快捷发送中
+        :return:
+        """
+        file_path = QFileDialog.getOpenFileName(self, "选择文件", "./", "Text Files (*.dat)")
+        if file_path[0] == '':
+            return
+        with open(file_path[0], 'r') as file:
+            line = file.readline()
+            line = line.strip()
+            while line:
+                data = line.split(' ', 1)
+                print(data[0])
+                try:
+                    child_lineEdit = eval('self.ui.le_{}'.format(data[0]))
+                    child_lineEdit.setText(data[1].strip())
+                except Exception as e:
+                    QMessageBox.warning(self, 'warning', str(e))
+                    return
+                line = file.readline()
+
+    def handler_settings(self):
+        pass
+
+    def __init_shortcut_autosave__(self):
+        """
+        加载上次关闭时快捷发送内容
+        :return:
+        """
+        file_path = os.path.join(BASE_PATH, 'shortcut_autosave.dat')
+        with open(file_path, 'r') as file:
+            line = file.readline()
+            line = line.strip()
+            while line:
+                data = line.split(' ', 1)
+                try:
+                    child_lineEdit = eval('self.ui.le_{}'.format(data[0]))
+                    child_lineEdit.setText(data[1].strip())
+                except Exception as e:
+                    print(str(e))
+                line = file.readline()
+
+    def __del_shortcut_autosave__(self):
+        """
+        关闭窗口时调用该函数保存快捷发送内容，在下次打开程序后加载
+        :return:
+        """
+        exportStr = ''
+        for i in range(1, SHORTCUT_LIST_NUM + 1):
+            tmp = eval(f'self.ui.le_{i}.text()')
+            tmp = tmp.strip()
+            if tmp != '':
+                exportStr += str(i) + ' ' + tmp + '\n'
+
+        self.file_path = os.path.join(BASE_PATH, 'shortcut_autosave.dat')
+        with open(self.file_path, 'w') as file:
+            file.write(exportStr)
+
+    def handler_shortcutCleanup(self):
+        for i in range(1, SHORTCUT_LIST_NUM + 1):
+            chile_lineEdit = eval('self.ui.le_{}'.format(i))
+            chile_lineEdit.clear()
+
+    def __init_sendFile__(self):
+        self.ui.toolButton.clicked.connect(self.handler_selectFile)
+        self.ui.pushButton_4.clicked.connect(self.handler_confirmSelect)
+        self.ui.pushButton_5.clicked.connect(self.handler_send_file)
+
+    def handler_selectFile(self):
+        file_path = QFileDialog.getOpenFileName(self, "选择文件", "./")
+        if file_path[0] == '':
+            return
+        self.ui.lineEdit.setText(file_path[0])
+
+    def handler_confirmSelect(self):
+        file_path = self.ui.lineEdit.text()
+        if file_path == '':
+            QMessageBox.warning(self, '未选择文件', '请先选择文件')
+            return
+        try:
+            with open(file_path, 'r') as file:
+                exportStr = file.read()
+                self.ui.textBrowser_2.setText(exportStr)
+        except Exception as e:
+            QMessageBox.warning(self, '文件打开失败', str(e))
+            self.ui.textBrowser_2.clear()
+
+    def handler_send_file(self):
+        if not self.serial_thread or not self.serial_thread.isRunning():
+            QMessageBox.warning(self, "Warning", "请先打开串口！")
+            return
+        self.ui.radioButton_2.setChecked(True)
+        self.serial_thread.data_format_send = 'ascii'
+        self.ui.checkBox_2.setChecked(True)
+        data = self.ui.textBrowser_2.toPlainText()
+        if data == '':
+            return
+        self.serial_thread.send_data(data)
+        if self.ui.checkBox.isChecked():  # 打开显示输出
+            self.handle_data_display(data + "\r\n",
+                                     "send as " + ('hex' if self.ui.radioButton.isChecked() else 'asc'))

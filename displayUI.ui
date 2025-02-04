@@ -25,6 +25,13 @@
   <property name="windowTitle">
    <string>UartAssistant v1.0（Author：DdXd）</string>
   </property>
+  <property name="windowIcon">
+   <iconset>
+    <normalon>logo/logo.ico</normalon>
+    <disabledoff>logo/logo.ico</disabledoff>
+    <disabledon>logo/logo.ico</disabledon>
+   </iconset>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_2">
     <item row="0" column="0">
@@ -225,7 +232,7 @@
              <bool>true</bool>
             </property>
             <property name="currentIndex">
-             <number>0</number>
+             <number>1</number>
             </property>
             <property name="elideMode">
              <enum>Qt::ElideNone</enum>
@@ -404,7 +411,7 @@
                  </property>
                  <layout class="QGridLayout" name="gridLayout_4">
                   <item row="15" column="3">
-                   <widget class="QLineEdit" name="lineEdit_30"/>
+                   <widget class="QLineEdit" name="le_43"/>
                   </item>
                   <item row="1" column="3">
                    <widget class="QLineEdit" name="le_4"/>
@@ -432,7 +439,7 @@
                    </widget>
                   </item>
                   <item row="7" column="9">
-                   <widget class="QLineEdit" name="lineEdit_47"/>
+                   <widget class="QLineEdit" name="le_24"/>
                   </item>
                   <item row="2" column="8">
                    <widget class="QPushButton" name="pb_9">
@@ -454,10 +461,10 @@
                    </widget>
                   </item>
                   <item row="9" column="7">
-                   <widget class="QLineEdit" name="lineEdit_37"/>
+                   <widget class="QLineEdit" name="le_29"/>
                   </item>
                   <item row="15" column="6">
-                   <widget class="QPushButton" name="pushButton_45">
+                   <widget class="QPushButton" name="pb_44">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
                       <horstretch>0</horstretch>
@@ -476,10 +483,10 @@
                    </widget>
                   </item>
                   <item row="5" column="9">
-                   <widget class="QLineEdit" name="lineEdit_21"/>
+                   <widget class="QLineEdit" name="le_18"/>
                   </item>
                   <item row="18" column="7">
-                   <widget class="QLineEdit" name="lineEdit_45"/>
+                   <widget class="QLineEdit" name="le_53"/>
                   </item>
                   <item row="2" column="1">
                    <widget class="QPushButton" name="pb_7">
@@ -501,7 +508,7 @@
                    </widget>
                   </item>
                   <item row="11" column="6">
-                   <widget class="QPushButton" name="pushButton_42">
+                   <widget class="QPushButton" name="pb_35">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
                       <horstretch>0</horstretch>
@@ -520,10 +527,10 @@
                    </widget>
                   </item>
                   <item row="7" column="7">
-                   <widget class="QLineEdit" name="lineEdit_35"/>
+                   <widget class="QLineEdit" name="le_23"/>
                   </item>
                   <item row="16" column="6">
-                   <widget class="QPushButton" name="pushButton_46">
+                   <widget class="QPushButton" name="pb_47">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
                       <horstretch>0</horstretch>
@@ -542,7 +549,7 @@
                    </widget>
                   </item>
                   <item row="9" column="6">
-                   <widget class="QPushButton" name="pushButton_40">
+                   <widget class="QPushButton" name="pb_29">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
                       <horstretch>0</horstretch>
@@ -561,7 +568,7 @@
                    </widget>
                   </item>
                   <item row="13" column="6">
-                   <widget class="QPushButton" name="pushButton_43">
+                   <widget class="QPushButton" name="pb_38">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
                       <horstretch>0</horstretch>
@@ -580,7 +587,7 @@
                    </widget>
                   </item>
                   <item row="17" column="6">
-                   <widget class="QPushButton" name="pushButton_47">
+                   <widget class="QPushButton" name="pb_50">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
                       <horstretch>0</horstretch>
@@ -599,10 +606,10 @@
                    </widget>
                   </item>
                   <item row="13" column="7">
-                   <widget class="QLineEdit" name="lineEdit_40"/>
+                   <widget class="QLineEdit" name="le_38"/>
                   </item>
                   <item row="6" column="1">
-                   <widget class="QPushButton" name="pushButton_14">
+                   <widget class="QPushButton" name="pb_19">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
                       <horstretch>0</horstretch>
@@ -621,7 +628,7 @@
                    </widget>
                   </item>
                   <item row="10" column="3">
-                   <widget class="QLineEdit" name="lineEdit_26"/>
+                   <widget class="QLineEdit" name="le_31"/>
                   </item>
                   <item row="4" column="7">
                    <widget class="QLineEdit" name="le_14"/>
@@ -646,34 +653,34 @@
                    </widget>
                   </item>
                   <item row="5" column="3">
-                   <widget class="QLineEdit" name="lineEdit_11"/>
+                   <widget class="QLineEdit" name="le_16"/>
                   </item>
                   <item row="13" column="3">
-                   <widget class="QLineEdit" name="lineEdit_28"/>
+                   <widget class="QLineEdit" name="le_37"/>
                   </item>
                   <item row="2" column="7">
                    <widget class="QLineEdit" name="le_8"/>
                   </item>
                   <item row="17" column="3">
-                   <widget class="QLineEdit" name="lineEdit_32"/>
+                   <widget class="QLineEdit" name="le_49"/>
                   </item>
                   <item row="8" column="9">
-                   <widget class="QLineEdit" name="lineEdit_48"/>
+                   <widget class="QLineEdit" name="le_27"/>
                   </item>
                   <item row="1" column="7">
                    <widget class="QLineEdit" name="le_5"/>
                   </item>
                   <item row="16" column="7">
-                   <widget class="QLineEdit" name="lineEdit_43"/>
+                   <widget class="QLineEdit" name="le_47"/>
                   </item>
                   <item row="3" column="3">
                    <widget class="QLineEdit" name="le_10"/>
                   </item>
                   <item row="19" column="7">
-                   <widget class="QLineEdit" name="lineEdit_46"/>
+                   <widget class="QLineEdit" name="le_56"/>
                   </item>
                   <item row="10" column="6">
-                   <widget class="QPushButton" name="pushButton_41">
+                   <widget class="QPushButton" name="pb_32">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
                       <horstretch>0</horstretch>
@@ -692,7 +699,7 @@
                    </widget>
                   </item>
                   <item row="14" column="7">
-                   <widget class="QLineEdit" name="lineEdit_41"/>
+                   <widget class="QLineEdit" name="le_41"/>
                   </item>
                   <item row="1" column="1">
                    <widget class="QPushButton" name="pb_4">
@@ -714,7 +721,7 @@
                    </widget>
                   </item>
                   <item row="16" column="1">
-                   <widget class="QPushButton" name="pushButton_33">
+                   <widget class="QPushButton" name="pb_46">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
                       <horstretch>0</horstretch>
@@ -733,7 +740,7 @@
                    </widget>
                   </item>
                   <item row="6" column="9">
-                   <widget class="QLineEdit" name="lineEdit_22">
+                   <widget class="QLineEdit" name="le_21">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                       <horstretch>0</horstretch>
@@ -743,7 +750,7 @@
                    </widget>
                   </item>
                   <item row="9" column="8">
-                   <widget class="QPushButton" name="pushButton_52">
+                   <widget class="QPushButton" name="pb_30">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
                       <horstretch>0</horstretch>
@@ -762,13 +769,13 @@
                    </widget>
                   </item>
                   <item row="7" column="3">
-                   <widget class="QLineEdit" name="lineEdit_23"/>
+                   <widget class="QLineEdit" name="le_22"/>
                   </item>
                   <item row="15" column="7">
-                   <widget class="QLineEdit" name="lineEdit_42"/>
+                   <widget class="QLineEdit" name="le_44"/>
                   </item>
                   <item row="18" column="6">
-                   <widget class="QPushButton" name="pushButton_48">
+                   <widget class="QPushButton" name="pb_53">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
                       <horstretch>0</horstretch>
@@ -787,7 +794,7 @@
                    </widget>
                   </item>
                   <item row="14" column="8">
-                   <widget class="QPushButton" name="pushButton_56">
+                   <widget class="QPushButton" name="pb_42">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
                       <horstretch>0</horstretch>
@@ -806,10 +813,10 @@
                    </widget>
                   </item>
                   <item row="11" column="7">
-                   <widget class="QLineEdit" name="lineEdit_39"/>
+                   <widget class="QLineEdit" name="le_35"/>
                   </item>
                   <item row="8" column="8">
-                   <widget class="QPushButton" name="pushButton_51">
+                   <widget class="QPushButton" name="pb_27">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
                       <horstretch>0</horstretch>
@@ -850,7 +857,7 @@
                    <widget class="QLineEdit" name="le_9"/>
                   </item>
                   <item row="10" column="1">
-                   <widget class="QPushButton" name="pushButton_28">
+                   <widget class="QPushButton" name="pb_31">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
                       <horstretch>0</horstretch>
@@ -869,7 +876,7 @@
                    </widget>
                   </item>
                   <item row="6" column="8">
-                   <widget class="QPushButton" name="pushButton_24">
+                   <widget class="QPushButton" name="pb_21">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
                       <horstretch>0</horstretch>
@@ -891,19 +898,19 @@
                    <widget class="QLineEdit" name="le_3"/>
                   </item>
                   <item row="19" column="3">
-                   <widget class="QLineEdit" name="lineEdit_34"/>
+                   <widget class="QLineEdit" name="le_55"/>
                   </item>
                   <item row="0" column="3">
                    <widget class="QLineEdit" name="le_1"/>
                   </item>
                   <item row="9" column="9">
-                   <widget class="QLineEdit" name="lineEdit_49"/>
+                   <widget class="QLineEdit" name="le_30"/>
                   </item>
                   <item row="10" column="7">
-                   <widget class="QLineEdit" name="lineEdit_38"/>
+                   <widget class="QLineEdit" name="le_32"/>
                   </item>
                   <item row="19" column="6">
-                   <widget class="QPushButton" name="pushButton_49">
+                   <widget class="QPushButton" name="pb_56">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
                       <horstretch>0</horstretch>
@@ -922,7 +929,7 @@
                    </widget>
                   </item>
                   <item row="7" column="6">
-                   <widget class="QPushButton" name="pushButton_38">
+                   <widget class="QPushButton" name="pb_23">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
                       <horstretch>0</horstretch>
@@ -941,7 +948,7 @@
                    </widget>
                   </item>
                   <item row="15" column="8">
-                   <widget class="QPushButton" name="pushButton_57">
+                   <widget class="QPushButton" name="pb_45">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
                       <horstretch>0</horstretch>
@@ -960,7 +967,7 @@
                    </widget>
                   </item>
                   <item row="20" column="1">
-                   <widget class="QPushButton" name="pushButton_37">
+                   <widget class="QPushButton" name="pb_58">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
                       <horstretch>0</horstretch>
@@ -979,10 +986,10 @@
                    </widget>
                   </item>
                   <item row="8" column="7">
-                   <widget class="QLineEdit" name="lineEdit_36"/>
+                   <widget class="QLineEdit" name="le_26"/>
                   </item>
                   <item row="5" column="1">
-                   <widget class="QPushButton" name="pushButton_13">
+                   <widget class="QPushButton" name="pb_16">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
                       <horstretch>0</horstretch>
@@ -1001,7 +1008,7 @@
                    </widget>
                   </item>
                   <item row="5" column="6">
-                   <widget class="QPushButton" name="pushButton_18">
+                   <widget class="QPushButton" name="pb_17">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
                       <horstretch>0</horstretch>
@@ -1020,7 +1027,7 @@
                    </widget>
                   </item>
                   <item row="13" column="1">
-                   <widget class="QPushButton" name="pushButton_30">
+                   <widget class="QPushButton" name="pb_37">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
                       <horstretch>0</horstretch>
@@ -1042,7 +1049,7 @@
                    <widget class="QLineEdit" name="le_11"/>
                   </item>
                   <item row="15" column="1">
-                   <widget class="QPushButton" name="pushButton_32">
+                   <widget class="QPushButton" name="pb_43">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
                       <horstretch>0</horstretch>
@@ -1061,7 +1068,7 @@
                    </widget>
                   </item>
                   <item row="17" column="1">
-                   <widget class="QPushButton" name="pushButton_34">
+                   <widget class="QPushButton" name="pb_49">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
                       <horstretch>0</horstretch>
@@ -1099,13 +1106,13 @@
                    </widget>
                   </item>
                   <item row="18" column="3">
-                   <widget class="QLineEdit" name="lineEdit_33"/>
+                   <widget class="QLineEdit" name="le_52"/>
                   </item>
                   <item row="5" column="7">
-                   <widget class="QLineEdit" name="lineEdit_16"/>
+                   <widget class="QLineEdit" name="le_17"/>
                   </item>
                   <item row="5" column="8">
-                   <widget class="QPushButton" name="pushButton_23">
+                   <widget class="QPushButton" name="pb_18">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
                       <horstretch>0</horstretch>
@@ -1124,7 +1131,7 @@
                    </widget>
                   </item>
                   <item row="14" column="1">
-                   <widget class="QPushButton" name="pushButton_31">
+                   <widget class="QPushButton" name="pb_40">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
                       <horstretch>0</horstretch>
@@ -1143,7 +1150,7 @@
                    </widget>
                   </item>
                   <item row="16" column="8">
-                   <widget class="QPushButton" name="pushButton_58">
+                   <widget class="QPushButton" name="pb_48">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
                       <horstretch>0</horstretch>
@@ -1162,7 +1169,7 @@
                    </widget>
                   </item>
                   <item row="10" column="8">
-                   <widget class="QPushButton" name="pushButton_53">
+                   <widget class="QPushButton" name="pb_33">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
                       <horstretch>0</horstretch>
@@ -1181,7 +1188,7 @@
                    </widget>
                   </item>
                   <item row="8" column="6">
-                   <widget class="QPushButton" name="pushButton_39">
+                   <widget class="QPushButton" name="pb_26">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
                       <horstretch>0</horstretch>
@@ -1241,10 +1248,10 @@
                    </widget>
                   </item>
                   <item row="6" column="3">
-                   <widget class="QLineEdit" name="lineEdit_12"/>
+                   <widget class="QLineEdit" name="le_19"/>
                   </item>
                   <item row="11" column="8">
-                   <widget class="QPushButton" name="pushButton_54">
+                   <widget class="QPushButton" name="pb_36">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
                       <horstretch>0</horstretch>
@@ -1269,10 +1276,10 @@
                    <widget class="QLineEdit" name="le_2"/>
                   </item>
                   <item row="17" column="7">
-                   <widget class="QLineEdit" name="lineEdit_44"/>
+                   <widget class="QLineEdit" name="le_50"/>
                   </item>
                   <item row="13" column="8">
-                   <widget class="QPushButton" name="pushButton_55">
+                   <widget class="QPushButton" name="pb_39">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
                       <horstretch>0</horstretch>
@@ -1294,7 +1301,7 @@
                    <widget class="QLineEdit" name="le_7"/>
                   </item>
                   <item row="17" column="8">
-                   <widget class="QPushButton" name="pushButton_59">
+                   <widget class="QPushButton" name="pb_51">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
                       <horstretch>0</horstretch>
@@ -1313,13 +1320,13 @@
                    </widget>
                   </item>
                   <item row="9" column="3">
-                   <widget class="QLineEdit" name="lineEdit_25"/>
+                   <widget class="QLineEdit" name="le_28"/>
                   </item>
                   <item row="14" column="3">
-                   <widget class="QLineEdit" name="lineEdit_29"/>
+                   <widget class="QLineEdit" name="le_40"/>
                   </item>
                   <item row="19" column="8">
-                   <widget class="QPushButton" name="pushButton_61">
+                   <widget class="QPushButton" name="pb_57">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
                       <horstretch>0</horstretch>
@@ -1338,7 +1345,7 @@
                    </widget>
                   </item>
                   <item row="16" column="3">
-                   <widget class="QLineEdit" name="lineEdit_31"/>
+                   <widget class="QLineEdit" name="le_46"/>
                   </item>
                   <item row="1" column="6">
                    <widget class="QPushButton" name="pb_5">
@@ -1363,10 +1370,10 @@
                    <widget class="QLineEdit" name="le_13"/>
                   </item>
                   <item row="10" column="9">
-                   <widget class="QLineEdit" name="lineEdit_50"/>
+                   <widget class="QLineEdit" name="le_33"/>
                   </item>
                   <item row="11" column="1">
-                   <widget class="QPushButton" name="pushButton_29">
+                   <widget class="QPushButton" name="pb_34">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
                       <horstretch>0</horstretch>
@@ -1385,7 +1392,7 @@
                    </widget>
                   </item>
                   <item row="11" column="3">
-                   <widget class="QLineEdit" name="lineEdit_27"/>
+                   <widget class="QLineEdit" name="le_34"/>
                   </item>
                   <item row="4" column="8">
                    <widget class="QPushButton" name="pb_15">
@@ -1426,7 +1433,7 @@
                    </widget>
                   </item>
                   <item row="7" column="1">
-                   <widget class="QPushButton" name="pushButton_25">
+                   <widget class="QPushButton" name="pb_22">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
                       <horstretch>0</horstretch>
@@ -1445,7 +1452,7 @@
                    </widget>
                   </item>
                   <item row="14" column="6">
-                   <widget class="QPushButton" name="pushButton_44">
+                   <widget class="QPushButton" name="pb_41">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
                       <horstretch>0</horstretch>
@@ -1464,7 +1471,7 @@
                    </widget>
                   </item>
                   <item row="18" column="1">
-                   <widget class="QPushButton" name="pushButton_35">
+                   <widget class="QPushButton" name="pb_52">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
                       <horstretch>0</horstretch>
@@ -1483,7 +1490,7 @@
                    </widget>
                   </item>
                   <item row="6" column="6">
-                   <widget class="QPushButton" name="pushButton_19">
+                   <widget class="QPushButton" name="pb_20">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
                       <horstretch>0</horstretch>
@@ -1502,10 +1509,10 @@
                    </widget>
                   </item>
                   <item row="8" column="3">
-                   <widget class="QLineEdit" name="lineEdit_24"/>
+                   <widget class="QLineEdit" name="le_25"/>
                   </item>
                   <item row="9" column="1">
-                   <widget class="QPushButton" name="pushButton_27">
+                   <widget class="QPushButton" name="pb_28">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
                       <horstretch>0</horstretch>
@@ -1524,7 +1531,7 @@
                    </widget>
                   </item>
                   <item row="19" column="1">
-                   <widget class="QPushButton" name="pushButton_36">
+                   <widget class="QPushButton" name="pb_55">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
                       <horstretch>0</horstretch>
@@ -1543,7 +1550,7 @@
                    </widget>
                   </item>
                   <item row="18" column="8">
-                   <widget class="QPushButton" name="pushButton_60">
+                   <widget class="QPushButton" name="pb_54">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
                       <horstretch>0</horstretch>
@@ -1581,10 +1588,10 @@
                    </widget>
                   </item>
                   <item row="6" column="7">
-                   <widget class="QLineEdit" name="lineEdit_17"/>
+                   <widget class="QLineEdit" name="le_20"/>
                   </item>
                   <item row="8" column="1">
-                   <widget class="QPushButton" name="pushButton_26">
+                   <widget class="QPushButton" name="pb_25">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
                       <horstretch>0</horstretch>
@@ -1603,7 +1610,7 @@
                    </widget>
                   </item>
                   <item row="7" column="8">
-                   <widget class="QPushButton" name="pushButton_50">
+                   <widget class="QPushButton" name="pb_24">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
                       <horstretch>0</horstretch>
@@ -1660,31 +1667,31 @@
                    </widget>
                   </item>
                   <item row="11" column="9">
-                   <widget class="QLineEdit" name="lineEdit_51"/>
+                   <widget class="QLineEdit" name="le_36"/>
                   </item>
                   <item row="13" column="9">
-                   <widget class="QLineEdit" name="lineEdit_52"/>
+                   <widget class="QLineEdit" name="le_39"/>
                   </item>
                   <item row="14" column="9">
-                   <widget class="QLineEdit" name="lineEdit_53"/>
+                   <widget class="QLineEdit" name="le_42"/>
                   </item>
                   <item row="15" column="9">
-                   <widget class="QLineEdit" name="lineEdit_54"/>
+                   <widget class="QLineEdit" name="le_45"/>
                   </item>
                   <item row="16" column="9">
-                   <widget class="QLineEdit" name="lineEdit_55"/>
+                   <widget class="QLineEdit" name="le_48"/>
                   </item>
                   <item row="17" column="9">
-                   <widget class="QLineEdit" name="lineEdit_56"/>
+                   <widget class="QLineEdit" name="le_51"/>
                   </item>
                   <item row="18" column="9">
-                   <widget class="QLineEdit" name="lineEdit_57"/>
+                   <widget class="QLineEdit" name="le_54"/>
                   </item>
                   <item row="19" column="9">
-                   <widget class="QLineEdit" name="lineEdit_58"/>
+                   <widget class="QLineEdit" name="le_57"/>
                   </item>
                   <item row="20" column="6">
-                   <widget class="QPushButton" name="pushButton_62">
+                   <widget class="QPushButton" name="pb_59">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
                       <horstretch>0</horstretch>
@@ -1703,7 +1710,7 @@
                    </widget>
                   </item>
                   <item row="20" column="8">
-                   <widget class="QPushButton" name="pushButton_63">
+                   <widget class="QPushButton" name="pb_60">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
                       <horstretch>0</horstretch>
@@ -1722,17 +1729,93 @@
                    </widget>
                   </item>
                   <item row="20" column="3">
-                   <widget class="QLineEdit" name="lineEdit_59"/>
+                   <widget class="QLineEdit" name="le_58"/>
                   </item>
                   <item row="20" column="7">
-                   <widget class="QLineEdit" name="lineEdit_60"/>
+                   <widget class="QLineEdit" name="le_59"/>
                   </item>
                   <item row="20" column="9">
-                   <widget class="QLineEdit" name="lineEdit_61"/>
+                   <widget class="QLineEdit" name="le_60"/>
                   </item>
                  </layout>
                 </widget>
                </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="tab_3">
+             <attribute name="title">
+              <string>文件发送</string>
+             </attribute>
+             <layout class="QHBoxLayout" name="horizontalLayout_2">
+              <item>
+               <widget class="QTextBrowser" name="textBrowser_2">
+                <property name="layoutDirection">
+                 <enum>Qt::LeftToRight</enum>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <layout class="QVBoxLayout" name="verticalLayout">
+                <property name="leftMargin">
+                 <number>20</number>
+                </property>
+                <property name="rightMargin">
+                 <number>20</number>
+                </property>
+                <item>
+                 <widget class="QLabel" name="label_9">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <pointsize>15</pointsize>
+                   </font>
+                  </property>
+                  <property name="text">
+                   <string>选择文件</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignCenter</set>
+                  </property>
+                  <property name="wordWrap">
+                   <bool>false</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <layout class="QHBoxLayout" name="horizontalLayout">
+                  <item>
+                   <widget class="QLineEdit" name="lineEdit"/>
+                  </item>
+                  <item>
+                   <widget class="QToolButton" name="toolButton">
+                    <property name="text">
+                     <string>...</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="pushButton_4">
+                  <property name="text">
+                   <string>确认选择</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="pushButton_5">
+                  <property name="text">
+                   <string>发送内容</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
               </item>
              </layout>
             </widget>
@@ -1762,6 +1845,9 @@
     </property>
     <addaction name="action_4"/>
     <addaction name="separator"/>
+    <addaction name="action_5"/>
+    <addaction name="action_6"/>
+    <addaction name="separator"/>
     <addaction name="actions"/>
    </widget>
    <widget class="QMenu" name="menu_2">
@@ -1773,7 +1859,14 @@
     <addaction name="separator"/>
     <addaction name="action_3"/>
    </widget>
+   <widget class="QMenu" name="menu_3">
+    <property name="title">
+     <string>工具</string>
+    </property>
+    <addaction name="action_7"/>
+   </widget>
    <addaction name="menu"/>
+   <addaction name="menu_3"/>
    <addaction name="menu_2"/>
   </widget>
   <action name="actionabout_UartAssistant_v1_0">
@@ -1814,6 +1907,21 @@
   <action name="actions">
    <property name="text">
     <string>设置</string>
+   </property>
+  </action>
+  <action name="action_5">
+   <property name="text">
+    <string>导入快捷发送</string>
+   </property>
+  </action>
+  <action name="action_6">
+   <property name="text">
+    <string>导出快捷发送</string>
+   </property>
+  </action>
+  <action name="action_7">
+   <property name="text">
+    <string>清除快捷发送</string>
    </property>
   </action>
  </widget>
