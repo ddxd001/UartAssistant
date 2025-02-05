@@ -1,5 +1,5 @@
 """
-project:    UsartAssistant
+project:    UartAssistant
 branch:     master
 author:     DdXd
 date:       2025/01/24

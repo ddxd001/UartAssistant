@@ -6,6 +6,7 @@ Date: 2025/01/26
 加载初始化界面
 主线程，负责渲染窗口界面，接收界面操作功能
 """
+import json
 import os
 import sys
 
@@ -13,8 +14,7 @@ import serial
 import serial.tools.list_ports
 from PyQt5.QtCore import QDateTime
 from PyQt5.QtGui import QTextCursor, QIcon
-from PyQt5.QtWidgets import QComboBox, QMessageBox, QMainWindow, QButtonGroup, QPushButton, QLineEdit, QFileDialog, \
-    QApplication
+from PyQt5.QtWidgets import *
 
 import settings_thread
 from serialThread import SerialThread
@@ -38,6 +38,12 @@ class SerialPort(QMainWindow):
         # QMainWindow构造函数初始化
         super().__init__()
 
+        # 串口接收线程
+        self.serial_thread = None
+        # 串口自动发送线程
+        self.serial_autosend_thread = None
+        self.settingsMenu = None
+
         self.ui = Ui_MainWindow.Ui_MainWindow()
         # 这个函数本身需要传递一个MainWindow类，而该类本身就继承了这个，所以可以直接传入self
         self.ui.setupUi(self)
@@ -52,15 +58,12 @@ class SerialPort(QMainWindow):
         self.__init_shortcut_autosave__()
         self.__init_sendFile__()
 
-        # 串口接收线程
-        self.serial_thread = None
-        # 串口自动发送线程
-        self.serial_autosend_thread = None
         # 设置logo
         self.setWindowIcon(QIcon(os.path.join(BASE_PATH, 'logo.ico')))
 
     def __del__(self):
         self.__del_shortcut_autosave__()
+        pass
 
     def closeEvent(self, event):
         self.__del__()
@@ -79,7 +82,6 @@ class SerialPort(QMainWindow):
         # 设置波特率
         for baud_rate in [1200, 2400, 4800, 9600, 19200, 384000, 57600, 115200, 460800, 921600, 230400, 1500000]:
             self.ui.comboBox_2.addItem(str(baud_rate), baud_rate)
-        self.ui.comboBox_2.setCurrentIndex(7)
 
         # 设置校验位
         self.ui.comboBox_5.setEditable(False)
@@ -89,8 +91,6 @@ class SerialPort(QMainWindow):
                              'Even': serial.PARITY_EVEN, 'Mark': serial.PARITY_MARK,
                              'Space': serial.PARITY_SPACE}.items():
             self.ui.comboBox_5.addItem(key, value)
-        # 设置默认值
-        self.ui.comboBox_5.setCurrentIndex(0)
 
         # 初始化数据位列表
         self.ui.comboBox_4.setEditable(False)
@@ -98,8 +98,6 @@ class SerialPort(QMainWindow):
         self.ui.comboBox_4.setInsertPolicy(QComboBox.InsertAfterCurrent)  # 设置插入方式
         for data_bit in [serial.FIVEBITS, serial.SIXBITS, serial.SEVENBITS, serial.EIGHTBITS]:
             self.ui.comboBox_4.addItem(str(data_bit), data_bit)
-        # 设置默认值
-        self.ui.comboBox_4.setCurrentIndex(3)
 
         # 初始化停止位列表
         self.ui.comboBox_3.setEditable(False)
@@ -116,17 +114,61 @@ class SerialPort(QMainWindow):
         self.ui.ButtonGroup_2.addButton(self.ui.radioButton_3)
         self.ui.ButtonGroup_2.addButton(self.ui.radioButton_4)
 
-        # 设置默认值
-        self.ui.comboBox_3.setCurrentIndex(0)
-
-        # 初始化周期发送时间(1000ms)
-        self.ui.lineEdit_2.setText('1000')
-
-        # 发送新行初始化
-        self.ui.checkBox_2.setChecked(True)
+        self.make_settings()
 
         # 打开串口
         self.ui.pushButton_2.clicked.connect(self.open_serial_connection)
+
+    def set_default_settings(self):
+        self.ui.comboBox_2.setCurrentIndex(7)
+        self.ui.comboBox_5.setCurrentIndex(0)
+        self.ui.comboBox_4.setCurrentIndex(3)
+        self.ui.comboBox_3.setCurrentIndex(0)
+        self.ui.lineEdit_2.setText('1000')
+        self.ui.checkBox_2.setChecked(True)
+
+    def make_settings(self):
+        try:
+            with open(os.path.join(BASE_PATH, 'settings.json'), 'r', encoding='utf-8') as infile:
+                settings_dict = json.load(infile)
+            # 接收显示
+            if settings_dict['comboBox_3'] == 0:
+                self.ui.radioButton_3.setChecked(False)
+                self.ui.radioButton_4.setChecked(True)
+            else:
+                self.ui.radioButton_3.setChecked(True)
+                self.ui.radioButton_4.setChecked(False)
+            # 发送编码
+            if settings_dict['comboBox_4'] == 0:
+                self.ui.radioButton.setChecked(False)
+                self.ui.radioButton_2.setChecked(True)
+                self.rbn_data_format_ascii_clicked()
+            else:
+                self.ui.radioButton.setChecked(True)
+                self.ui.radioButton_2.setChecked(False)
+                self.rbn_data_format_hex_clicked()
+            # 波特率设置
+            self.ui.comboBox_2.setCurrentIndex(settings_dict['comboBox_5'])
+            # 数据位设置
+            self.ui.comboBox_4.setCurrentIndex(settings_dict['comboBox_6'])
+            # 校验位设置
+            self.ui.comboBox_5.setCurrentIndex(settings_dict['comboBox_7'])
+            # 停止位设置
+            self.ui.comboBox_3.setCurrentIndex(settings_dict['comboBox_8'])
+            # 时间戳
+            self.ui.checkBox_7.setChecked(settings_dict['checkBox'])
+            # 输出显示
+            self.ui.checkBox.setChecked(settings_dict['checkBox_2'])
+            # 自动保存
+            self.ui.checkBox_6.setChecked(settings_dict['checkBox_3'])
+            # 发送新行
+            self.ui.checkBox_2.setChecked(settings_dict['checkBox_4'])
+            self.handler_auto_line_data()
+            # 设置字体
+
+        except FileNotFoundError:
+            self.set_default_settings()
+
 
     def __init_recv_setting__(self):
         """
@@ -477,7 +519,13 @@ class SerialPort(QMainWindow):
                 line = file.readline()
 
     def handler_settings(self):
-        pass
+        self.settingsMenu = SettingsThread()
+        self.settingsMenu.show()
+        self.settingsMenu.setting_data.connect(self.make_settings)
+        self.settingsMenu.setting_error.connect(self.make_settings_err)
+
+    def make_settings_err(self):
+        QMessageBox.warning(self, 'warning', '初始化设置失败')
 
     def __init_shortcut_autosave__(self):
         """
