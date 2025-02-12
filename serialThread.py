@@ -177,3 +177,6 @@ class SerialThread(QThread):
             self.serial.write(byte_array)
         except Exception as e:
             self.serial_error.emit('发送失败!')
+
+    def isRunning(self):
+        return self.running

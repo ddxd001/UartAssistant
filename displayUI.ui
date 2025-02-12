@@ -215,7 +215,7 @@
               <item>
                <widget class="QCheckBox" name="checkBox_6">
                 <property name="enabled">
-                 <bool>false</bool>
+                 <bool>true</bool>
                 </property>
                 <property name="text">
                  <string>自动保存</string>
@@ -232,7 +232,7 @@
              <bool>true</bool>
             </property>
             <property name="currentIndex">
-             <number>1</number>
+             <number>0</number>
             </property>
             <property name="elideMode">
              <enum>Qt::ElideNone</enum>
@@ -1864,6 +1864,7 @@
      <string>工具</string>
     </property>
     <addaction name="action_7"/>
+    <addaction name="action_8"/>
    </widget>
    <addaction name="menu"/>
    <addaction name="menu_3"/>
@@ -1922,6 +1923,11 @@
   <action name="action_7">
    <property name="text">
     <string>清除快捷发送</string>
+   </property>
+  </action>
+  <action name="action_8">
+   <property name="text">
+    <string>清空接收区</string>
    </property>
   </action>
  </widget>

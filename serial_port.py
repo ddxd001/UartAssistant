@@ -9,6 +9,8 @@ Date: 2025/01/26
 import json
 import os
 import sys
+import webbrowser
+from datetime import datetime
 
 import serial
 import serial.tools.list_ports
@@ -18,7 +20,7 @@ from PyQt5.QtWidgets import *
 
 import settings_thread
 from serialThread import SerialThread
-from AutoSend import AutoSend
+from timeClock import timeClock
 from settings_thread import SettingsThread
 # 导入设计的ui界面转换成的py文件
 import displayUI as Ui_MainWindow
@@ -27,6 +29,7 @@ import displayUI as Ui_MainWindow
 MIN_AUTOSEND_MS = 10
 SHORTCUT_LIST_NUM = 60
 BASE_PATH = os.path.dirname(os.path.realpath(sys.argv[0]))
+AUTO_REFRESH_INTERVAL = 800
 
 
 class SerialPort(QMainWindow):
@@ -43,6 +46,8 @@ class SerialPort(QMainWindow):
         # 串口自动发送线程
         self.serial_autosend_thread = None
         self.settingsMenu = None
+        self.autosave_timer = None
+        self.serial_port_item = None
 
         self.ui = Ui_MainWindow.Ui_MainWindow()
         # 这个函数本身需要传递一个MainWindow类，而该类本身就继承了这个，所以可以直接传入self
@@ -57,12 +62,15 @@ class SerialPort(QMainWindow):
         self.__init_menu__()
         self.__init_shortcut_autosave__()
         self.__init_sendFile__()
+        self.__init_autosave__()
+        self.__init_autoRefresh__()
 
         # 设置logo
         self.setWindowIcon(QIcon(os.path.join(BASE_PATH, 'logo.ico')))
 
     def __del__(self):
         self.__del_shortcut_autosave__()
+        self.handler_autosave()
         pass
 
     def closeEvent(self, event):
@@ -169,7 +177,6 @@ class SerialPort(QMainWindow):
         except FileNotFoundError:
             self.set_default_settings()
 
-
     def __init_recv_setting__(self):
         """
         接收初始化设置
@@ -255,12 +262,13 @@ class SerialPort(QMainWindow):
             # 串口线程操作
             self.serial_thread.data_received.connect(
                 lambda data_received: self.handle_data_display(
-                    data_received,
+                    data_received + '\r\n',
                     "recv as " + ('hex' if self.ui.radioButton_3.isChecked() else 'asc')
                 )
             )
             self.serial_thread.serial_error.connect(self.handler_serial_error)
             self.serial_thread.start()
+            self.auto_save_timer_thread()  # 重新加载自动保存
             # ui界面操作
             self.ui.comboBox.setEnabled(False)
             self.ui.comboBox_2.setEnabled(False)
@@ -277,6 +285,8 @@ class SerialPort(QMainWindow):
             # 串口线程操作
             if self.serial_autosend_thread:
                 self.serial_autosend_thread.stop()  # 防止在自动发送时关闭串口导致连续弹窗问题
+            if self.autosave_timer:
+                self.autosave_timer.stop()
             self.serial_thread.stop()
             # ui界面操作
             self.ui.checkBox_8.setChecked(False)
@@ -401,7 +411,7 @@ class SerialPort(QMainWindow):
                 QMessageBox.warning(self, "warning", "周期时间太短！")
                 self.ui.checkBox_8.setChecked(False)
                 return
-            self.serial_autosend_thread = AutoSend(timelength)
+            self.serial_autosend_thread = timeClock(timelength)
             self.serial_autosend_thread.timeout.connect(self.send_serial_data)
             self.serial_autosend_thread.start()
         else:
@@ -457,11 +467,28 @@ class SerialPort(QMainWindow):
         """
         # 保存文件
         self.ui.action_4.triggered.connect(self.handler_saveFile)
-        # self.ui.action_3.triggered.connect(self.handler_help)
+        self.ui.action_3.triggered.connect(self.handler_help)
         self.ui.action_6.triggered.connect(self.handler_exportShortcut)
         self.ui.action_5.triggered.connect(self.handler_importShortcut)
         self.ui.actions.triggered.connect(self.handler_settings)
         self.ui.action_7.triggered.connect(self.handler_shortcutCleanup)
+        self.ui.actionabout_UartAssistant_v1_0.triggered.connect(self.handler_aboutUartAssistant)
+        self.ui.action_8.triggered.connect(self.handler_cleanup_recv)
+
+    @staticmethod
+    def handler_help(self):
+        file_path = os.path.join(BASE_PATH, 'doc/UartAssistant使用帮助.html')
+        url = 'file://' + file_path
+        webbrowser.open(url)
+
+    @staticmethod
+    def handler_aboutUartAssistant(self):
+        file_path = os.path.join(BASE_PATH, 'README.html')
+        url = 'file://' + file_path
+        webbrowser.open(url)
+
+    def handler_cleanup_recv(self):
+        self.ui.textBrowser.clear()
 
     def handler_saveFile(self):
         """
@@ -604,3 +631,66 @@ class SerialPort(QMainWindow):
         if self.ui.checkBox.isChecked():  # 打开显示输出
             self.handle_data_display(data + "\r\n",
                                      "send as " + ('hex' if self.ui.radioButton.isChecked() else 'asc'))
+
+    def __init_autosave__(self):
+        self.ui.checkBox_6.clicked.connect(self.auto_save_timer_thread)
+
+    def handler_autosave(self):
+        """
+        自动保存
+        :return:
+        """
+        if self.ui.checkBox_6.isChecked():
+            date = datetime.now().strftime('%Y_%m_%d_%H_%M_%S')
+            data = self.ui.textBrowser.toPlainText()
+            with open(os.path.join(BASE_PATH, 'settings.json'), 'r') as file:
+                jsonDir = file.read()
+                jsonDir = json.loads(jsonDir)
+                file_path = jsonDir['lineEdit']
+                print(file_path)
+                if file_path == '':
+                    file_path = BASE_PATH
+            try:
+                with open(os.path.join(file_path, f'{date}_autosave.txt'), 'w') as file:
+                    file.write(data)
+            except Exception as e:
+                QMessageBox.warning(self, 'warning', str(e))
+
+    def auto_save_timer_thread(self):
+        if not self.serial_thread or not self.serial_thread.isRunning():
+            return
+        if self.ui.checkBox_6.isChecked():
+            with open(os.path.join(BASE_PATH, 'settings.json'), 'r') as file:
+                jsonDir = file.read()
+                jsonDir = json.loads(jsonDir)
+                if jsonDir['checkBox_5'] and (not self.autosave_timer or not self.autosave_timer.isRunning):
+                    self.autosave_timer = timeClock(1000 * int(jsonDir['lineEdit_2']))
+                    self.autosave_timer.start()
+                    self.autosave_timer.timeout.connect(self.handler_autosave)
+                else:
+                    if self.autosave_timer and self.autosave_timer.isRunning:
+                        self.autosave_timer.stop()
+        else:
+            if self.autosave_timer and self.autosave_timer.isRunning:
+                self.autosave_timer.stop()
+
+    def __init_autoRefresh__(self, ):
+        """
+        自动刷新串口列表
+        AUTO_REFRESH_INTERVAL:刷新间隔时间
+        :return:
+        """
+        self.autoRefresh_timer = timeClock(AUTO_REFRESH_INTERVAL)
+        self.autoRefresh_timer.start()
+        self.autoRefresh_timer.timeout.connect(self.handler_autoRefresh)
+
+    def handler_autoRefresh(self):
+        if self.serial_thread and self.autoRefresh_timer.isRunning:
+            return
+        ports = list(serial.tools.list_ports.comports())
+        if ports == self.serial_port_item:
+            return
+        self.serial_port_item = ports
+        self.ui.comboBox.clear()
+        for port in ports:
+            self.ui.comboBox.addItem(port[0])

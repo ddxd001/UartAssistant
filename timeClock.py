@@ -7,7 +7,7 @@ from PyQt5.QtCore import *
 import time
 
 
-class AutoSend(QThread):
+class timeClock(QThread):
     timeout = pyqtSignal(bool)
 
     def __init__(self, timelength):

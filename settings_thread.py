@@ -14,6 +14,7 @@ FONT_LIST = ["Arial Unicode MS", "Fixedsys", "SimSun-ExtB", "System", "Terminal"
              "华文宋体", "华文彩云", "华文新魏", "华文楷体", "华文琥珀", "华文细黑", "华文行楷", "华文隶书", "宋体",
              "幼圆", "微软雅黑", "新宋体", "方正姚体", "方正舒体", "楷体", "隶书", "黑体", ]
 BASE_PATH = os.path.dirname(os.path.realpath(sys.argv[0]))
+MIN_AUTOSAVE_TIME = 5
 
 class SettingsThread(QMainWindow):
     setting_data = pyqtSignal(bool)
@@ -98,6 +99,8 @@ class SettingsThread(QMainWindow):
                     self.findChild(QLineEdit, obj).setText(str(index))
                 elif self.findChild(QCheckBox, obj):
                     self.findChild(QCheckBox, obj).setChecked(index)
+            if self.ui.checkBox_5.isChecked():
+                self.ui.lineEdit_2.setEnabled(True)
         except Exception as err:
             self.setting_error.emit(str(err))
 
@@ -106,6 +109,20 @@ class SettingsThread(QMainWindow):
         self.ui.pushButton_3.clicked.connect(self.handler_apply)
         self.ui.pushButton_4.clicked.connect(self.handler_cancel)
         self.ui.pushButton_5.clicked.connect(self.handler_commit)
+        self.ui.toolButton.clicked.connect(self.handler_setPath)
+        self.ui.checkBox_5.clicked.connect(self.handler_autosave)
+
+    def handler_autosave(self):
+        if self.ui.checkBox_5.isChecked():
+            self.ui.lineEdit_2.setEnabled(True)
+        else:
+            self.ui.lineEdit_2.setEnabled(False)
+
+    def handler_setPath(self):
+        file_path = QFileDialog.getExistingDirectory(self, "选择文件夹")
+        if file_path == '':
+            return
+        self.ui.lineEdit.setText(file_path)
 
     def handler_setDefault(self):
         self.ui.comboBox.setCurrentIndex(0)
@@ -126,6 +143,18 @@ class SettingsThread(QMainWindow):
         self.ui.lineEdit_2.setEnabled(False)
 
     def handler_apply(self):
+        if self.ui.checkBox.isChecked():
+            tim = self.ui.lineEdit_2.text()
+            try:
+                tim = int(tim)
+                if tim < MIN_AUTOSAVE_TIME:
+                    QMessageBox.warning(self, '间隔时间过短', '时间太短')
+                    self.ui.lineEdit_2.clear()
+                    return
+            except ValueError as e:
+                QMessageBox.warning(self, 'not a number', str(e))
+                self.ui.lineEdit_2.clear()
+                return
         self.export_settings()
         self.setting_data.emit(True)
 
@@ -135,3 +164,4 @@ class SettingsThread(QMainWindow):
     def handler_commit(self):
         self.handler_apply()
         self.close()
+
