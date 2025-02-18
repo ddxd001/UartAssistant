@@ -405,8 +405,8 @@
                   <rect>
                    <x>0</x>
                    <y>0</y>
-                   <width>626</width>
-                   <height>715</height>
+                   <width>638</width>
+                   <height>592</height>
                   </rect>
                  </property>
                  <layout class="QGridLayout" name="gridLayout_4">
@@ -1836,7 +1836,7 @@
      <x>0</x>
      <y>0</y>
      <width>705</width>
-     <height>26</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">
@@ -1866,8 +1866,17 @@
     <addaction name="action_7"/>
     <addaction name="action_8"/>
    </widget>
+   <widget class="QMenu" name="menu_4">
+    <property name="title">
+     <string>主题</string>
+    </property>
+    <addaction name="actiondefault"/>
+    <addaction name="actionlight"/>
+    <addaction name="actiondark"/>
+   </widget>
    <addaction name="menu"/>
    <addaction name="menu_3"/>
+   <addaction name="menu_4"/>
    <addaction name="menu_2"/>
   </widget>
   <action name="actionabout_UartAssistant_v1_0">
@@ -1928,6 +1937,21 @@
   <action name="action_8">
    <property name="text">
     <string>清空接收区</string>
+   </property>
+  </action>
+  <action name="actionlight">
+   <property name="text">
+    <string>light</string>
+   </property>
+  </action>
+  <action name="actiondark">
+   <property name="text">
+    <string>dark</string>
+   </property>
+  </action>
+  <action name="actiondefault">
+   <property name="text">
+    <string>default</string>
    </property>
   </action>
  </widget>

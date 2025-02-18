@@ -10,9 +10,9 @@ Major：Computer Science
 
 ### 界面概览
 
-![软件界面1](./../image/%E8%BD%AF%E4%BB%B6%E7%95%8C%E9%9D%A2.png)
+![软件界面1](./UartAssistant%E4%BD%BF%E7%94%A8%E5%B8%AE%E5%8A%A9.assets/%E8%BD%AF%E4%BB%B6%E7%95%8C%E9%9D%A2.png)
 
-![软件界面2](./../image/%E8%BD%AF%E4%BB%B6%E7%95%8C%E9%9D%A22.png)
+![软件界面2](./UartAssistant%E4%BD%BF%E7%94%A8%E5%B8%AE%E5%8A%A9.assets/%E8%BD%AF%E4%BB%B6%E7%95%8C%E9%9D%A2_1.png)
 
 ## 1、菜单栏
 
@@ -26,7 +26,7 @@ Major：Computer Science
 
 ## 2、串口配置区
 
-![软件界面_1](./../image/%E8%BD%AF%E4%BB%B6%E7%95%8C%E9%9D%A2_1.png)
+![软件界面_1](./UartAssistant%E4%BD%BF%E7%94%A8%E5%B8%AE%E5%8A%A9.assets/%E8%BD%AF%E4%BB%B6%E7%95%8C%E9%9D%A2_1-1739876808594-3.png)
 
 ### 串口选择
 
@@ -58,10 +58,12 @@ Major：Computer Science
 
 同时可以预编辑多条指令，选择发送
 
-![软件界面_2](./../image/%E8%BD%AF%E4%BB%B6%E7%95%8C%E9%9D%A2_2.png)
+![软件界面_2](./UartAssistant%E4%BD%BF%E7%94%A8%E5%B8%AE%E5%8A%A9.assets/%E8%BD%AF%E4%BB%B6%E7%95%8C%E9%9D%A2_2.png)
 
 ## 主题编辑
 
-![light_theme](./UartAssistant%E4%BD%BF%E7%94%A8%E5%B8%AE%E5%8A%A9.assets/light_theme.png)![dark_theme](./UartAssistant%E4%BD%BF%E7%94%A8%E5%B8%AE%E5%8A%A9.assets/dark_theme.png)
+![light_theme](./UartAssistant%E4%BD%BF%E7%94%A8%E5%B8%AE%E5%8A%A9.assets/light_theme-1739876848721-7.png)
+
+![dark_theme](./UartAssistant%E4%BD%BF%E7%94%A8%E5%B8%AE%E5%8A%A9.assets/dark_theme-1739876870043-10.png)
 
 支持选择两种全新主题风格，且选择后每次打开默认选择

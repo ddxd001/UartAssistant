@@ -24,6 +24,7 @@ from timeClock import timeClock
 from settings_thread import SettingsThread
 # 导入设计的ui界面转换成的py文件
 import displayUI as Ui_MainWindow
+from QSSLoader import QSSLoader
 
 # 最小自动发送的时间间隔
 MIN_AUTOSEND_MS = 10
@@ -64,6 +65,7 @@ class SerialPort(QMainWindow):
         self.__init_sendFile__()
         self.__init_autosave__()
         self.__init_autoRefresh__()
+        self.__init_switch_theme__()
 
         # 设置logo
         self.setWindowIcon(QIcon(os.path.join(BASE_PATH, 'logo.ico')))
@@ -71,11 +73,21 @@ class SerialPort(QMainWindow):
     def __del__(self):
         self.__del_shortcut_autosave__()
         self.handler_autosave()
-        pass
 
     def closeEvent(self, event):
         self.__del__()
         event.accept()
+
+    def __init_switch_theme__(self):
+        self.ui.actiondefault.triggered.connect(lambda: self.switch_theme('default'))
+        self.ui.actionlight.triggered.connect(lambda: self.switch_theme('light'))
+        self.ui.actiondark.triggered.connect(lambda: self.switch_theme('dark'))
+
+
+    def switch_theme(self, theme_name):
+        with open(os.path.join(BASE_PATH, 'style/' + theme_name + '.qss'), 'r', encoding='utf-8') as f:
+            qss_sheet = f.read()
+        self.setStyleSheet(qss_sheet)
 
     def __init_serial_setting__(self):
         """
@@ -171,6 +183,13 @@ class SerialPort(QMainWindow):
             self.ui.checkBox_6.setChecked(settings_dict['checkBox_3'])
             # 发送新行
             self.ui.checkBox_2.setChecked(settings_dict['checkBox_4'])
+            # 设置主题
+            if settings_dict['comboBox_9'] == 0:
+                self.switch_theme('default')
+            elif settings_dict['comboBox_9'] == 1:
+                self.switch_theme('light')
+            elif settings_dict['comboBox_9'] == 2:
+                self.switch_theme('dark')
             self.handler_auto_line_data()
             # 设置字体
 
@@ -477,13 +496,13 @@ class SerialPort(QMainWindow):
 
     @staticmethod
     def handler_help(self):
-        file_path = os.path.join(BASE_PATH, 'doc/UartAssistant使用帮助.html')
+        file_path = os.path.join(BASE_PATH, 'html/UartAssistant使用帮助.html')
         url = 'file://' + file_path
         webbrowser.open(url)
 
     @staticmethod
     def handler_aboutUartAssistant(self):
-        file_path = os.path.join(BASE_PATH, 'README.html')
+        file_path = os.path.join(BASE_PATH, 'html/README.html')
         url = 'file://' + file_path
         webbrowser.open(url)
 

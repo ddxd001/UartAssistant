@@ -5,7 +5,6 @@ author:     DdXd
 date:       2025/01/24
 python:     3.8
 """
-
 import sys
 from serial_port import SerialPort
 from PyQt5.QtWidgets import QApplication

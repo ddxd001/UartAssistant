@@ -16,6 +16,7 @@ FONT_LIST = ["Arial Unicode MS", "Fixedsys", "SimSun-ExtB", "System", "Terminal"
 BASE_PATH = os.path.dirname(os.path.realpath(sys.argv[0]))
 MIN_AUTOSAVE_TIME = 5
 
+
 class SettingsThread(QMainWindow):
     setting_data = pyqtSignal(bool)
     setting_error = pyqtSignal(str)
@@ -42,6 +43,9 @@ class SettingsThread(QMainWindow):
         # 字体大小
         for size in [6, 7, 8, 9, 10, 11, 12, 13, 14, 15]:
             self.ui.comboBox_2.addItem(str(size), str(size))
+        # 主题
+        for theme in ['default', 'light', 'dark']:
+            self.ui.comboBox_9.addItem(theme, theme)
         # 接收显示、发送编码
         for choice in ['ASCII', 'HEX']:
             self.ui.comboBox_3.addItem(choice, choice)
@@ -164,4 +168,3 @@ class SettingsThread(QMainWindow):
     def handler_commit(self):
         self.handler_apply()
         self.close()
-
