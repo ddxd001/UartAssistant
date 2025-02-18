@@ -1,0 +1,149 @@
+/******************** 通用样式 ********************/
+QWidget {
+    background-color: #ffffff;
+    color: q-text-primary;
+    font-family: "Segoe UI", Arial;
+    font-size: 13px;
+}
+
+/******************** 按钮 ********************/
+QPushButton {
+    background-color: #f0f0f0;
+    border: 1px solid #d0d0d0;
+    border-radius: 4px;
+    padding: 6px 6px;
+    min-width: 20px;
+}
+
+QPushButton:hover {
+    background-color: #e0e0e0;
+    border-color: #c0c0c0;
+}
+
+QPushButton:pressed {
+    background-color: #d0d0d0;
+}
+
+QPushButton:disabled {
+    background-color: #f8f8f8;
+    color: #aaaaaa;
+}
+
+
+/******************** radio按钮 ********************/
+QRadioButton
+{
+	font: 75 12pt "微软雅黑";
+	background: transparent;
+	color:black;
+	border: none;
+}
+
+QRadioButton:disabled
+{
+	color: gray;
+}
+
+QRadioButton::indicator
+{
+    width: 12px;
+    height: 12px;
+    border-radius: 8px;
+}
+
+QRadioButton::indicator:checked
+{
+	width: 14px;
+    height: 14px;
+    background-color: qradialgradient(spread:pad, cx:0.5, cy:0.5, radius:0.5, fx:0.5, fy:0.5, stop:0 rgba(4, 156, 232 ,255), stop:0.6 rgba(4, 156, 232 ,255),stop:0.65 rgba(255, 255, 255, 255), stop:0.8 rgba(255, 255, 255, 255), stop:0.85 rgba(4, 156, 232, 255), stop:1 rgba(4, 156, 232 ,255));
+    border: 1px solid rgb(4, 156, 232);
+	border-radius: 8px;
+}
+
+QRadioButton::indicator:unchecked
+{
+    background-color: white;
+    border: 2px solid rgb(66, 66, 66);
+}
+
+QRadioButton::indicator:unchecked:disabled
+{
+    background-color: rgb(213, 213, 213);
+    border: 2px solid  rgb(200, 200, 200);
+}
+
+QRadioButton::indicator:checked:disabled
+{
+	width: 14px;
+    height: 14px;
+	background-color: qradialgradient(spread:pad, cx:0.5, cy:0.5, radius:0.5, fx:0.5, fy:0.5, stop:0 gray, stop:0.6 gray,stop:0.65 white, stop:0.8 white, stop:0.85 gray, stop:1 gray);
+    border: 1px solid gray;
+	border-radius: 8px;
+}
+
+/******************** 输入控件 ********************/
+QLineEdit, QComboBox, QTextEdit {
+    border: 1px solid #d0d0d0;
+    border-radius: 3px;
+    padding: 5px 8px;
+    background: white;
+}
+
+QLineEdit:focus, QComboBox:focus {
+    border: 1px solid q-primary-color;
+}
+
+/******************** 进度条 ********************/
+QProgressBar {
+    border: 1px solid #d0d0d0;
+    border-radius: 3px;
+    text-align: center;
+}
+
+QProgressBar::chunk {
+    background-color: q-primary-color;
+    border-radius: 2px;
+}
+
+/******************** 滚动条 ********************/
+QScrollBar:vertical {
+    width: 12px;
+    background: #f8f8f8;
+}
+
+QScrollBar::handle:vertical {
+    background: #e0e0e0;
+    min-height: 30px;
+    border-radius: 6px;
+}
+
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+    background: none;
+}
+
+/******************** 标签 ********************/
+QLabel {
+    color: q-text-primary;
+}
+
+QLabel[important="true"] {
+    color: q-primary-color;
+    font-weight: bold;
+}
+
+/******************** 特殊状态 ********************/
+
+QMenu::item:selected {
+    background-color: #87CEFA;
+}
+
+QComboBox:hover {
+    background-color: #ADD8E6;
+}
+
+/******************** 现代阴影效果 ********************/
+QMenu {
+    border: 1px solid #e0e0e0;
+    background: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
