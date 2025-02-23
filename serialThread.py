@@ -100,6 +100,7 @@ class SerialThread(QThread):
                     bytesize=self.data_bits,
                     timeout=2
             ) as self.serial:
+                print(self.baud_rate)
                 self.running = True
                 while self.running:
                     data = self.__read_data__()
@@ -164,8 +165,7 @@ class SerialThread(QThread):
                 data_str = data_str[2:].strip()
                 send_list.append(num)
             if self.auto_line:
-                send_list.append(0x0d)
-                send_list.append(0x0a)
+                send_list.append('/r/n')
             byte_array = bytes(send_list)
         else:
             if self.auto_line:

@@ -100,7 +100,7 @@ class SerialPort(QMainWindow):
             self.ui.comboBox.addItem(port[0])
 
         # 设置波特率
-        for baud_rate in [1200, 2400, 4800, 9600, 19200, 384000, 57600, 115200, 460800, 921600, 230400, 1500000]:
+        for baud_rate in [1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200, 460800, 921600, 230400, 1500000]:
             self.ui.comboBox_2.addItem(str(baud_rate), baud_rate)
 
         # 设置校验位
@@ -281,7 +281,7 @@ class SerialPort(QMainWindow):
             # 串口线程操作
             self.serial_thread.data_received.connect(
                 lambda data_received: self.handle_data_display(
-                    data_received + '\r\n',
+                    data_received,
                     "recv as " + ('hex' if self.ui.radioButton_3.isChecked() else 'asc')
                 )
             )
