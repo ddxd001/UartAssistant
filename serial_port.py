@@ -390,7 +390,6 @@ class SerialPort(QMainWindow):
             QMessageBox.warning(self, "Warning", "请先打开串口！")
             return
         data = self.ui.textEdit.toPlainText()
-        # print(data)
         if data != "":
             self.serial_thread.send_data(data)
             if self.ui.checkBox.isChecked():  # 打开显示输出
@@ -558,7 +557,6 @@ class SerialPort(QMainWindow):
             line = line.strip()
             while line:
                 data = line.split(' ', 1)
-                print(data[0])
                 try:
                     child_lineEdit = eval('self.ui.le_{}'.format(data[0]))
                     child_lineEdit.setText(data[1].strip())
@@ -669,7 +667,6 @@ class SerialPort(QMainWindow):
                 jsonDir = file.read()
                 jsonDir = json.loads(jsonDir)
                 file_path = jsonDir['lineEdit']
-                print(file_path)
                 if file_path == '':
                     file_path = BASE_PATH
             try:
@@ -737,7 +734,6 @@ class SerialPort(QMainWindow):
             if send_list[0] == data_head and send_list[len(send_list) - 1] == data_tail:
                 del send_list[0]
                 del send_list[-1]
-                print(send_list)
                 self.ui.textBrowser_3.insertPlainText('[package]:' + self.deep_analysis(send_list) + '\n')
         else:
             return
@@ -755,5 +751,7 @@ class SerialPort(QMainWindow):
         ret_list = []
         for i in range(0, len(ana_list), 2):
             data = ana_list[i] << 8 | ana_list[i + 1]
+            if data & 0x8000 == 0x8000:
+                data = -((data - 1) ^ 0xFFFF)
             ret_list.append(data)
         return str(ret_list)
