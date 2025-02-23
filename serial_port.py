@@ -83,7 +83,6 @@ class SerialPort(QMainWindow):
         self.ui.actionlight.triggered.connect(lambda: self.switch_theme('light'))
         self.ui.actiondark.triggered.connect(lambda: self.switch_theme('dark'))
 
-
     def switch_theme(self, theme_name):
         with open(os.path.join(BASE_PATH, 'style/' + theme_name + '.qss'), 'r', encoding='utf-8') as f:
             qss_sheet = f.read()
@@ -284,6 +283,10 @@ class SerialPort(QMainWindow):
                     data_received,
                     "recv as " + ('hex' if self.ui.radioButton_3.isChecked() else 'asc')
                 )
+            )
+            # 数据解析操作
+            self.serial_thread.data_received.connect(
+                lambda data_received: self.data_analysis(data_received)
             )
             self.serial_thread.serial_error.connect(self.handler_serial_error)
             self.serial_thread.start()
@@ -713,3 +716,44 @@ class SerialPort(QMainWindow):
         self.ui.comboBox.clear()
         for port in ports:
             self.ui.comboBox.addItem(port[0])
+
+    def data_analysis(self, data_received):
+        if self.ui.checkBox_3.isChecked():
+            try:
+                data_head = self.ui.lineEdit_3.text()
+                data_head = int(data_head, 16)
+                data_tail = self.ui.lineEdit_4.text()
+                data_tail = int(data_tail, 16)
+            except Exception as e:
+                QMessageBox.warning(self, 'warning', str(e))
+            send_list = []
+            while data_received != '':
+                try:
+                    num = int(data_received[0:2], 16)
+                except ValueError:
+                    return
+                data_received = data_received[2:].strip()
+                send_list.append(num)
+            if send_list[0] == data_head and send_list[len(send_list) - 1] == data_tail:
+                del send_list[0]
+                del send_list[-1]
+                print(send_list)
+                self.ui.textBrowser_3.insertPlainText('[package]:' + self.deep_analysis(send_list) + '\n')
+        else:
+            return
+
+    def deep_analysis(self, ana_list):
+        """
+         定制化分析，收到必须是偶数个数，将两个八位二进制数合成十六位二进制并返回十进制
+         :param ana_list: 分析数组
+         :return: 分析结果：一个十进制数
+        """
+        if len(ana_list) == 0:
+            return '<no data>'
+        if len(ana_list) % 2 != 0:
+            return '<odd data>'
+        ret_list = []
+        for i in range(0, len(ana_list), 2):
+            data = ana_list[i] << 8 | ana_list[i + 1]
+            ret_list.append(data)
+        return str(ret_list)

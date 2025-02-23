@@ -90,7 +90,6 @@ class SerialThread(QThread):
     def run(self):
         if self.running:
             return
-
         try:
             with serial.Serial(
                     port=self.port,
@@ -118,7 +117,7 @@ class SerialThread(QThread):
             return
 
         try:
-            # 读取串口数据 例如：b'DDR V1.12 52218f4949 cym 23/07/0'
+            # 读取串口数据
             byte_array = self.serial.readline()
             if len(byte_array) == 0:
                 return None
