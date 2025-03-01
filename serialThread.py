@@ -97,7 +97,7 @@ class SerialThread(QThread):
                     parity=self.parity_bits,
                     stopbits=self.stop_bits,
                     bytesize=self.data_bits,
-                    timeout=2
+                    timeout=0.5
             ) as self.serial:
                 print(self.baud_rate)
                 self.running = True
